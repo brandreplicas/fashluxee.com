@@ -134,7 +134,7 @@
         }
     </style>
 
-        <meta name="google-site-verification" content="ONtS43ezWM3AvVXImGNypGwBbMtoDdgMS_Nlvt6PxMI" />
+        
     <script type="application/ld+json">
 	{
 		"@context": "https://schema.org",
@@ -239,8 +239,8 @@
     </style>
 </head>
 
-<body class="font-inter bg-background text-foreground">
-    <div id="root">
+<body class="font-inter bg-background text-foreground overflow-x-hidden">
+    <div id="root" class="overflow-x-hidden">
         <div class="min-h-screen">
             <!-- Navbar -->
             <nav class="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -286,7 +286,7 @@
                     <!-- Hero Section -->
     <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden" data-aos="fade-down">
         <!-- Starfield Background -->
-       
+
         <!-- Blinking Stars -->
   <div class="star-container star-top-left">
       <div class="star"><svg viewBox="0 0 24 24" fill="currentColor">
@@ -662,7 +662,7 @@
     </section>
 
     <!-- Values Section -->
-    <section class="relative py-20 bg-secondary/30" data-aos="fade-left">
+    <section class="relative py-20 bg-secondary/30 overflow-hidden" data-aos="fade-left">
         <!-- Blinking Stars -->
   <div class="star-container star-top-left">
       <div class="star"><svg viewBox="0 0 24 24" fill="currentColor">
@@ -1428,10 +1428,10 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({
-            duration: 1000,
-            easing: 'ease-in-out',
+            duration: 800,
+            easing: 'ease-out-cubic',
             once: true,
-            mirror: false
+            disable: 'mobile'
         });
 
         document.addEventListener('DOMContentLoaded', function() {

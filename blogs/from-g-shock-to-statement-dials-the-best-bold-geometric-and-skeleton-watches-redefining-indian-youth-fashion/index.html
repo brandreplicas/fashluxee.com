@@ -38,6 +38,28 @@
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
 
+    <!-- Anti-FOUC Theme Script -->
+    <meta name="color-scheme" content="light dark">
+    <script>
+        (function() {
+            try {
+                const storedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                    document.documentElement.style.colorScheme = 'dark';
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                    document.documentElement.style.colorScheme = 'light';
+                }
+            } catch (e) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+
     <!-- AOS (Animate On Scroll) Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
@@ -45,28 +67,33 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         primary: {
-                            DEFAULT: '#ffffff',
-                            foreground: '#000000',
+                            DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
+                            foreground: 'hsl(var(--primary-foreground) / <alpha-value>)',
                         },
                         secondary: {
-                            DEFAULT: '#18181b',
-                            foreground: '#f4f4f5',
+                            DEFAULT: 'hsl(var(--secondary) / <alpha-value>)',
+                            foreground: 'hsl(var(--secondary-foreground) / <alpha-value>)',
                         },
                         accent: {
-                            DEFAULT: '#c8a97e',
-                            foreground: '#ffffff',
+                            DEFAULT: 'hsl(var(--accent) / <alpha-value>)',
+                            foreground: 'hsl(var(--accent-foreground) / <alpha-value>)',
                         },
-                        background: '#000000',
-                        foreground: '#ffffff',
+                        background: 'hsl(var(--background) / <alpha-value>)',
+                        foreground: 'hsl(var(--foreground) / <alpha-value>)',
                         muted: {
-                            DEFAULT: '#18181b',
-                            foreground: '#a1a1aa',
+                            DEFAULT: 'hsl(var(--muted) / <alpha-value>)',
+                            foreground: 'hsl(var(--muted-foreground) / <alpha-value>)',
                         },
-                        border: '#27272a',
+                        card: {
+                            DEFAULT: 'hsl(var(--card) / <alpha-value>)',
+                            foreground: 'hsl(var(--card-foreground) / <alpha-value>)',
+                        },
+                        border: 'hsl(var(--border) / <alpha-value>)',
                     }
                 }
             }
@@ -75,17 +102,41 @@
 
     <style>
         :root {
+            color-scheme: light;
+            --background: 40 20% 99%;
+            --foreground: 0 0% 10%;
+            --primary: 0 0% 10%;
+            --primary-foreground: 0 0% 98%;
+            --secondary: 40 10% 94%;
+            --secondary-foreground: 0 0% 10%;
+            --card: 0 0% 100%;
+            --card-foreground: 0 0% 10%;
+            --muted: 40 10% 92%;
+            --muted-foreground: 0 0% 45%;
+            --accent: 36 45% 55%;
+            --accent-foreground: 0 0% 100%;
+            --border: 0 0% 89%;
+        }
+
+        .dark {
+            color-scheme: dark;
             --background: 0 0% 0%;
             --foreground: 0 0% 98%;
             --primary: 0 0% 98%;
-            --primary-foreground: 240 5.9% 10%;
-            --secondary: 240 3.7% 15.9%;
+            --primary-foreground: 0 0% 10%;
+            --secondary: 240 3.7% 12%;
             --secondary-foreground: 0 0% 98%;
-            --muted: 240 3.7% 15.9%;
-            --muted-foreground: 240 5% 64.9%;
+            --card: 240 6% 6%;
+            --card-foreground: 0 0% 98%;
+            --muted: 240 3.7% 15%;
+            --muted-foreground: 240 5% 65%;
             --accent: 36 45% 64%;
             --accent-foreground: 0 0% 100%;
-            --border: 240 3.7% 15.9%;
+            --border: 240 3.7% 18%;
+        }
+
+        body {
+            transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .starfield {
@@ -118,22 +169,71 @@
         .star {
             width: 20px;
             height: 20px;
-            color: #c8a97e;
+            color: hsl(var(--accent));
             animation: twinkle 3s infinite ease-in-out;
         }
 
         @keyframes twinkle {
-
             0%,
             100% {
-                opacity: 0.3;
+                opacity: 0.25;
                 transform: scale(0.8);
             }
 
             50% {
-                opacity: 1;
+                opacity: 0.95;
                 transform: scale(1.1);
             }
+        }
+
+        /* Luxury Theme toggle button */
+        .theme-toggle-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 9999px;
+            background: hsl(var(--secondary) / 0.8);
+            border: 1px solid hsl(var(--border));
+            color: hsl(var(--foreground));
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle-btn:hover {
+            background: hsl(var(--accent));
+            color: #ffffff;
+            border-color: hsl(var(--accent));
+            transform: scale(1.06);
+            box-shadow: 0 0 15px hsl(var(--accent) / 0.35);
+        }
+
+        .theme-icon-sun, .theme-icon-moon {
+            position: absolute;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+        }
+
+        html.dark .theme-icon-sun {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        html.dark .theme-icon-moon {
+            opacity: 0;
+            transform: rotate(90deg) scale(0.3);
+        }
+
+        html:not(.dark) .theme-icon-sun {
+            opacity: 0;
+            transform: rotate(-90deg) scale(0.3);
+        }
+
+        html:not(.dark) .theme-icon-moon {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
         }
     </style>
 
@@ -208,18 +308,19 @@
         .article-body {
             font-size: 1.15rem;
             font-weight: 300;
-            color: var(--muted-foreground);
+            color: hsl(var(--foreground));
             line-height: 1.8;
         }
 
         .article-body p {
             margin-bottom: 1.5rem;
+            color: hsl(var(--muted-foreground));
         }
 
         .article-body h2 {
             font-size: 1.85rem;
             font-weight: 600;
-            color: white;
+            color: hsl(var(--foreground));
             margin-top: 2.5rem;
             margin-bottom: 1.25rem;
             font-family: var(--lux-serif);
@@ -228,7 +329,7 @@
         .article-body h3 {
             font-size: 1.5rem;
             font-weight: 600;
-            color: white;
+            color: hsl(var(--foreground));
             margin-top: 2rem;
             margin-bottom: 1rem;
             font-family: var(--lux-serif);
@@ -286,7 +387,7 @@
             color: var(--lux-accent);
             margin-bottom: 2rem;
             font-weight: 700;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid hsl(var(--border));
             padding-bottom: 1rem;
         }
 
@@ -302,15 +403,16 @@
     </style>
 </head>
 
-<body class="font-inter bg-background text-foreground overflow-x-hidden">
+<body class="font-inter bg-background text-foreground overflow-x-hidden transition-colors duration-300">
     <div id="root" class="overflow-x-hidden">
         <div class="min-h-screen">
             <!-- Navbar -->
-            <nav class="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+            <nav class="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border transition-colors duration-300">
                 <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex items-center justify-between h-20">
                         <button id="menu-toggle" aria-expanded="false"
-                            class="lg:hidden p-2 hover:bg-gray-100 rounded-md transition-colors">
+                            class="lg:hidden p-2 hover:bg-secondary text-foreground rounded-md transition-colors"
+                            aria-label="Toggle Navigation Menu">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="lucide lucide-menu w-6 h-6">
@@ -321,27 +423,91 @@
                         </button>
                         <div class="flex-1 lg:flex-none flex justify-center lg:justify-start">
                             <a href="https://fashluxee.com"
-                                class="text-2xl font-light tracking-[0.2em] hover:text-accent transition-colors">
+                                class="text-2xl font-light tracking-[0.2em] text-foreground hover:text-accent transition-colors">
                                 FASHLUXEE
                             </a>
                         </div>
                         <div class="hidden lg:flex items-center space-x-8 flex-1 justify-center">
                                                                                                                                                                                 <a href="https://fashluxee.com/gallery"
-                                            class="text-sm tracking-wider hover:text-accent transition-colors">Gallery</a>
+                                            class="text-sm tracking-wider text-foreground/80 hover:text-accent transition-colors">Gallery</a>
                                                                                                                                                                                         <a href="https://fashluxee.com/blogs"
-                                            class="text-sm tracking-wider hover:text-accent transition-colors">Blogs</a>
+                                            class="text-sm tracking-wider text-foreground/80 hover:text-accent transition-colors">Blogs</a>
                                                                                                                                                                                         <a href="https://fashluxee.com/contact"
-                                            class="text-sm tracking-wider hover:text-accent transition-colors">Contact</a>
+                                            class="text-sm tracking-wider text-foreground/80 hover:text-accent transition-colors">Contact</a>
                                                                                                                                                                                                                                                                                                                                     </div>
+
+                        <!-- Theme Toggle (Desktop) -->
+                        <div class="hidden lg:flex items-center space-x-4">
+                            <button type="button" onclick="toggleTheme()" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
+                                <!-- Sun Icon (shown in dark mode) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-sun">
+                                    <circle cx="12" cy="12" r="4"></circle>
+                                    <path d="M12 2v2"></path>
+                                    <path d="M12 20v2"></path>
+                                    <path d="m4.93 4.93 1.41 1.41"></path>
+                                    <path d="m17.66 17.66 1.41 1.41"></path>
+                                    <path d="M2 12h2"></path>
+                                    <path d="M20 12h2"></path>
+                                    <path d="m6.34 17.66-1.41 1.41"></path>
+                                    <path d="m19.07 4.93-1.41 1.41"></path>
+                                </svg>
+                                <!-- Moon Icon (shown in light mode) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-moon">
+                                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Mobile Header Theme Toggle Icon (visible beside hamburger on small screens) -->
+                        <div class="lg:hidden flex items-center">
+                            <button type="button" onclick="toggleTheme()" class="theme-toggle-btn w-9 h-9" aria-label="Toggle Theme" title="Toggle Theme">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-sun">
+                                    <circle cx="12" cy="12" r="4"></circle>
+                                    <path d="M12 2v2"></path>
+                                    <path d="M12 20v2"></path>
+                                    <path d="m4.93 4.93 1.41 1.41"></path>
+                                    <path d="m17.66 17.66 1.41 1.41"></path>
+                                    <path d="M2 12h2"></path>
+                                    <path d="M20 12h2"></path>
+                                    <path d="m6.34 17.66-1.41 1.41"></path>
+                                    <path d="m19.07 4.93-1.41 1.41"></path>
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-moon">
+                                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                    <div id="mobile-menu" class="hidden lg:hidden py-4 space-y-4">
+                    <div id="mobile-menu" class="hidden lg:hidden py-4 space-y-4 border-t border-border">
                                                                                                                                                             <a href="https://fashluxee.com/gallery"
-                                        class="block text-sm tracking-wider hover:text-accent transition-colors">Gallery</a>
+                                        class="block text-sm tracking-wider text-foreground/80 hover:text-accent transition-colors">Gallery</a>
                                                                                                                                                                     <a href="https://fashluxee.com/blogs"
-                                        class="block text-sm tracking-wider hover:text-accent transition-colors">Blogs</a>
+                                        class="block text-sm tracking-wider text-foreground/80 hover:text-accent transition-colors">Blogs</a>
                                                                                                                                                                     <a href="https://fashluxee.com/contact"
-                                        class="block text-sm tracking-wider hover:text-accent transition-colors">Contact</a>
-                                                                                                                                                                                                                                                                                            </div>
+                                        class="block text-sm tracking-wider text-foreground/80 hover:text-accent transition-colors">Contact</a>
+                                                                                                                                                                                                                                                                        
+                        <div class="pt-2 border-t border-border">
+                            <button type="button" onclick="toggleTheme()" class="w-full flex items-center justify-between py-2 px-3 rounded-lg bg-secondary text-foreground text-sm tracking-wider">
+                                <span class="theme-toggle-label">Switch Theme</span>
+                                <div class="theme-toggle-btn w-7 h-7">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-sun">
+                                        <circle cx="12" cy="12" r="4"></circle>
+                                        <path d="M12 2v2"></path>
+                                        <path d="M12 20v2"></path>
+                                        <path d="m4.93 4.93 1.41 1.41"></path>
+                                        <path d="m17.66 17.66 1.41 1.41"></path>
+                                        <path d="M2 12h2"></path>
+                                        <path d="M20 12h2"></path>
+                                        <path d="m6.34 17.66-1.41 1.41"></path>
+                                        <path d="m19.07 4.93-1.41 1.41"></path>
+                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-moon">
+                                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                                    </svg>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </nav>
 
@@ -608,7 +774,7 @@
 
                     
                     <blockquote
-                        class="my-16 pl-6 sm:pl-12 border-l-4 border-accent text-2xl sm:text-3xl font-light italic leading-snug text-white/90"
+                        class="my-16 pl-6 sm:pl-12 border-l-4 border-accent text-2xl sm:text-3xl font-light italic leading-snug text-foreground/90"
                         style="font-family: var(--lux-serif);">
                         "Luxury is the bridge between historic heritage and the contemporary vision of tomorrow."
                     </blockquote>
@@ -619,7 +785,7 @@
 
                 <!-- Author Bio -->
                 <div
-                    class="mt-24 p-10 bg-secondary/50 border border-border flex flex-col md:flex-row gap-8 items-center md:items-start transition-all hover:bg-secondary">
+                    class="mt-24 p-10 bg-secondary/50 border border-border flex flex-col md:flex-row gap-8 items-center md:items-start transition-all hover:bg-secondary rounded-lg">
                     <div
                         class="w-20 h-20 bg-accent text-white rounded-full flex-shrink-0 flex items-center justify-center text-2xl font-bold">
                         K
@@ -658,21 +824,21 @@
                                 </div>
                                 <div class="text-[0.6rem] tracking-[0.2em] uppercase text-muted-foreground mb-1">
                                     22 June, 2026</div>
-                                <h4 class="font-serif text-lg leading-snug group-hover:text-accent transition-colors">
+                                <h4 class="font-serif text-lg leading-snug group-hover:text-accent transition-colors text-foreground">
                                     Celebrity Luxury Bags You Can Buy As First Copy In India (2026 Guide)</h4>
                                 <span
                                     class="text-[0.6rem] tracking-[0.3em] uppercase text-accent opacity-0 group-hover:opacity-100 transition-all">Read
                                     Story</span>
                             </a>
-                                                    <a href="https://fashluxee.com/blogs/festive-wardrobe-essentials-why-black-and-gold-contrast-chronographs-are-driving-indias-modern-gifting-culture" class="latest-blog-item group block">
+                                                    <a href="https://fashluxee.com/blogs/things-to-check-before-buying-replica-watches-online" class="latest-blog-item group block">
                                 <div class="aspect-[16/10] overflow-hidden mb-4 rounded shadow-sm">
-                                    <img src="https://fashluxee.com/img/blogs/festive-wardrobe-essentials-why-black-and-gold-contrast-chronographs-are-driving-indias-modern-gifting-culture-1-1782830139.png" class="w-full h-full object-cover"
-                                        alt="Festive Wardrobe Essentials Why Black And Gold Contrast Chronographs Are Driving India’s Modern Gifting Culture">
+                                    <img src="https://fashluxee.com/img/blogs/things-to-check-before-buying-replica-watches-online-1-1782830139.png" class="w-full h-full object-cover"
+                                        alt="Things To Check Before Buying Replica Watches Online">
                                 </div>
                                 <div class="text-[0.6rem] tracking-[0.2em] uppercase text-muted-foreground mb-1">
                                     22 June, 2026</div>
-                                <h4 class="font-serif text-lg leading-snug group-hover:text-accent transition-colors">
-                                    Festive Wardrobe Essentials Why Black And Gold Contrast Chronographs Are Driving India’s Modern Gifting Culture</h4>
+                                <h4 class="font-serif text-lg leading-snug group-hover:text-accent transition-colors text-foreground">
+                                    Things To Check Before Buying Replica Watches Online</h4>
                                 <span
                                     class="text-[0.6rem] tracking-[0.3em] uppercase text-accent opacity-0 group-hover:opacity-100 transition-all">Read
                                     Story</span>
@@ -684,7 +850,7 @@
                                 </div>
                                 <div class="text-[0.6rem] tracking-[0.2em] uppercase text-muted-foreground mb-1">
                                     22 June, 2026</div>
-                                <h4 class="font-serif text-lg leading-snug group-hover:text-accent transition-colors">
+                                <h4 class="font-serif text-lg leading-snug group-hover:text-accent transition-colors text-foreground">
                                     Automatic Vs Quartz Replica Watches What You Should Choose</h4>
                                 <span
                                     class="text-[0.6rem] tracking-[0.3em] uppercase text-accent opacity-0 group-hover:opacity-100 transition-all">Read
@@ -693,13 +859,13 @@
                                             </div>
 
                     <!-- Newsletter Sidebar -->
-                    <div class="mt-20 p-8 border border-border bg-secondary/50">
+                    <div class="mt-20 p-8 border border-border bg-secondary/50 rounded-lg">
                         <h4 class="text-xs tracking-[0.4em] uppercase text-accent font-bold mb-4">The Journal</h4>
                         <p class="text-muted-foreground text-xs leading-relaxed mb-6">Join our editorial list for early
                             access to our most profound narratives.</p>
                         <div class="relative">
                             <input type="email" placeholder="EMAIL ADDRESS"
-                                class="w-full bg-transparent border-b border-border py-3 text-[0.6rem] tracking-widest focus:outline-none focus:border-accent transition-colors text-white">
+                                class="w-full bg-transparent border-b border-border py-3 text-[0.6rem] tracking-widest focus:outline-none focus:border-accent transition-colors text-foreground placeholder:text-muted-foreground">
                             <button class="absolute right-0 bottom-3 text-accent">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="1.5">
@@ -715,7 +881,7 @@
             </main>
 
             <!-- Footer -->
-            <footer class="relative bg-black border-t border-white/10 overflow-hidden">
+            <footer class="relative bg-secondary/40 dark:bg-black text-foreground border-t border-border dark:border-white/10 overflow-hidden transition-colors duration-300">
                 <!-- Footer Starfield -->
                 <!-- Blinking Stars -->
   <div class="star-container star-top-left">
@@ -796,7 +962,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 mb-16">
                         <!-- Brand Column -->
                         <div class="lg:col-span-4">
-                            <h3 class="text-3xl font-serif tracking-[0.2em] mb-6 text-white">
+                            <h3 class="text-3xl font-serif tracking-[0.2em] mb-6 text-foreground">
                                 FASHLUXEE</h3>
                             <p class="text-muted-foreground font-light mb-8 max-w-sm leading-relaxed">
                                 Your premier destination for authenticated luxury fashion, where sophistication meets
@@ -805,33 +971,41 @@
 
                             <!-- Social Icons -->
                             <div class="flex space-x-4 mb-10">
-                                                                                                                                        <a href="https://linktr.ee/fashluxee"
-                                        class="w-10 h-10 rounded-full bg-[#111] hover:bg-accent text-white border border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
-                                                                                    <span class="text-[10px] font-bold">L</span>
+                                                                                                                                        <a href="https://linktr.ee/fashluxee" target="_blank" rel="noopener noreferrer"
+                                        aria-label="Link Tree" title="Link Tree"
+                                        class="w-10 h-10 rounded-full bg-card dark:bg-[#111] hover:bg-accent text-foreground dark:text-white border border-border dark:border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link-2"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
                                                                             </a>
-                                                                                                        <a href="https://www.tumblr.com/brandreplicas"
-                                        class="w-10 h-10 rounded-full bg-[#111] hover:bg-accent text-white border border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
-                                                                                    <span class="text-[10px] font-bold">T</span>
+                                                                                                        <a href="https://www.tumblr.com/brandreplicas" target="_blank" rel="noopener noreferrer"
+                                        aria-label="Tumblr" title="Tumblr"
+                                        class="w-10 h-10 rounded-full bg-card dark:bg-[#111] hover:bg-accent text-foreground dark:text-white border border-border dark:border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M14.563 24c-5.093 0-7.031-2.58-7.031-6.75v-6.938h-2.53v-3.75c2.625-.75 4.313-2.625 4.688-5.313h3.75v5.063h4.688v4h-4.688v6.375c0 2.063.938 2.813 2.625 2.813h2.438V24z"/></svg>
                                                                             </a>
-                                                                                                        <a href="https://chat.whatsapp.com/JxfxkFL7b9WI87yZjgwVOq?mode=wwc"
-                                        class="w-10 h-10 rounded-full bg-[#111] hover:bg-accent text-white border border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
-                                                                                    <span class="text-[10px] font-bold">W</span>
+                                                                                                        <a href="https://whatsapp.com/channel/0029VbDgdZUEgGfIY27E1S1j" target="_blank" rel="noopener noreferrer"
+                                        aria-label="WhatsApp Channel" title="WhatsApp Channel"
+                                        class="w-10 h-10 rounded-full bg-card dark:bg-[#111] hover:bg-accent text-foreground dark:text-white border border-border dark:border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                                                                             </a>
-                                                                                                        <a href="https://x.com/luxurypioneer"
-                                        class="w-10 h-10 rounded-full bg-[#111] hover:bg-accent text-white border border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
+                                                                                                        <a href="https://x.com/luxurypioneer" target="_blank" rel="noopener noreferrer"
+                                        aria-label="Twitter" title="Twitter"
+                                        class="w-10 h-10 rounded-full bg-card dark:bg-[#111] hover:bg-accent text-foreground dark:text-white border border-border dark:border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-twitter"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
                                                                             </a>
-                                                                                                        <a href="https://www.instagram.com/luxe_forall/"
-                                        class="w-10 h-10 rounded-full bg-[#111] hover:bg-accent text-white border border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
+                                                                                                        <a href="https://www.instagram.com/luxe_forall/" target="_blank" rel="noopener noreferrer"
+                                        aria-label="Instagram" title="Instagram"
+                                        class="w-10 h-10 rounded-full bg-card dark:bg-[#111] hover:bg-accent text-foreground dark:text-white border border-border dark:border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
                                                                             </a>
-                                                                                                        <a href="https://apps.apple.com/us/app/fashluxee/id6756571621"
-                                        class="w-10 h-10 rounded-full bg-[#111] hover:bg-accent text-white border border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
-                                                                                    <span class="text-[10px] font-bold">A</span>
+                                                                                                        <a href="https://apps.apple.com/us/app/fashluxee/id6756571621" target="_blank" rel="noopener noreferrer"
+                                        aria-label="App Store" title="App Store"
+                                        class="w-10 h-10 rounded-full bg-card dark:bg-[#111] hover:bg-accent text-foreground dark:text-white border border-border dark:border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.56.65-1.05 1.71-.92 2.73 1.01.08 2.01-.48 2.63-1.23z"/></svg>
                                                                             </a>
                                                                 
-                                                                    <a href="#"
-                                        class="w-10 h-10 rounded-full bg-[#111] hover:bg-accent text-white border border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
+                                                                
+                                                                    <a href="#" target="_blank" rel="noopener noreferrer"
+                                        aria-label="YouTube" title="YouTube"
+                                        class="w-10 h-10 rounded-full bg-card dark:bg-[#111] hover:bg-accent text-foreground dark:text-white border border-border dark:border-white/5 transition-all duration-300 flex items-center justify-center hover:scale-110">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-youtube"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 2-2 103.38 103.38 0 0 1 15 0 2 2 0 0 1 2 2 24.12 24.12 0 0 1 0 10 2 2 0 0 1-2 2 103.38 103.38 0 0 1-15 0 2 2 0 0 1-2-2Z"></path><path d="m9.75 15.02 5.75-3.02-5.75-3z"></path></svg>
                                     </a>
                                                             </div>
@@ -842,12 +1016,12 @@
                                     mobile app</p>
                                 <div class="flex flex-wrap gap-4">
                                     <a href="https://apps.apple.com/us/app/fashluxee/id6756571621"
-                                        class="transition-transform hover:scale-105 shadow-[0_0_15px_rgba(200,169,126,0.1)] hover:shadow-[0_0_25px_rgba(200,169,126,0.2)] rounded-lg overflow-hidden border border-white/10">
+                                        class="transition-transform hover:scale-105 shadow-[0_0_15px_rgba(200,169,126,0.1)] hover:shadow-[0_0_25px_rgba(200,169,126,0.2)] rounded-lg overflow-hidden border border-border dark:border-white/10">
                                         <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1314662400&h=62235c60f2e0e014e7a68516d2746401"
                                             alt="Download on the App Store" class="h-10">
                                     </a>
                                     <a href="#"
-                                        class="transition-transform hover:scale-105 shadow-[0_0_15px_rgba(200,169,126,0.1)] hover:shadow-[0_0_25px_rgba(200,169,126,0.2)] rounded-lg overflow-hidden border border-white/10">
+                                        class="transition-transform hover:scale-105 shadow-[0_0_15px_rgba(200,169,126,0.1)] hover:shadow-[0_0_25px_rgba(200,169,126,0.2)] rounded-lg overflow-hidden border border-border dark:border-white/10">
                                         <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
                                             alt="Get it on Google Play" class="h-10">
                                     </a>
@@ -857,7 +1031,7 @@
 
                         <!-- Menu Columns -->
                         <div class="lg:col-span-2">
-                            <h4 class="font-serif text-sm tracking-widest mb-8 text-white uppercase">MENU</h4>
+                            <h4 class="font-serif text-sm tracking-widest mb-8 text-foreground uppercase">MENU</h4>
                             <ul class="space-y-4">
                                                                                                                                                     <li><a href="https://fashluxee.com/gallery"
                                                 class="text-muted-foreground hover:text-accent transition-colors font-light text-sm tracking-wide">Gallery</a>
@@ -872,7 +1046,7 @@
                         </div>
 
                         <div class="lg:col-span-3">
-                            <h4 class="font-serif text-sm tracking-widest mb-8 text-white uppercase">SUPPORT</h4>
+                            <h4 class="font-serif text-sm tracking-widest mb-8 text-foreground uppercase">SUPPORT</h4>
                             <ul class="space-y-4">
                                                                                                                                                                                                                                                                                                                                                                 <li><a href="https://fashluxee.com/privacy-policy"
                                                 class="text-muted-foreground hover:text-accent transition-colors font-light text-sm tracking-wide">Privacy Policy</a>
@@ -887,35 +1061,35 @@
                         </div>
 
                         <div class="lg:col-span-3">
-                            <h4 class="font-serif text-sm tracking-widest mb-8 text-white uppercase">FOLLOW US</h4>
+                            <h4 class="font-serif text-sm tracking-widest mb-8 text-foreground uppercase">FOLLOW US</h4>
                             <ul class="space-y-4">
-                                                                    <li><a href="https://linktr.ee/fashluxee"
+                                                                    <li><a href="https://linktr.ee/fashluxee" target="_blank" rel="noopener noreferrer"
                                             class="text-muted-foreground hover:text-accent transition-colors font-light text-sm tracking-wide">Link Tree</a>
                                     </li>
-                                                                    <li><a href="https://www.tumblr.com/brandreplicas"
+                                                                    <li><a href="https://www.tumblr.com/brandreplicas" target="_blank" rel="noopener noreferrer"
                                             class="text-muted-foreground hover:text-accent transition-colors font-light text-sm tracking-wide">Tumblr</a>
                                     </li>
-                                                                    <li><a href="https://chat.whatsapp.com/JxfxkFL7b9WI87yZjgwVOq?mode=wwc"
-                                            class="text-muted-foreground hover:text-accent transition-colors font-light text-sm tracking-wide">WhatsApp Community</a>
+                                                                    <li><a href="https://whatsapp.com/channel/0029VbDgdZUEgGfIY27E1S1j" target="_blank" rel="noopener noreferrer"
+                                            class="text-muted-foreground hover:text-accent transition-colors font-light text-sm tracking-wide">WhatsApp Channel</a>
                                     </li>
-                                                                    <li><a href="https://x.com/luxurypioneer"
+                                                                    <li><a href="https://x.com/luxurypioneer" target="_blank" rel="noopener noreferrer"
                                             class="text-muted-foreground hover:text-accent transition-colors font-light text-sm tracking-wide">Twitter</a>
                                     </li>
-                                                                    <li><a href="https://www.instagram.com/luxe_forall/"
+                                                                    <li><a href="https://www.instagram.com/luxe_forall/" target="_blank" rel="noopener noreferrer"
                                             class="text-muted-foreground hover:text-accent transition-colors font-light text-sm tracking-wide">Instagram</a>
                                     </li>
-                                                                    <li><a href="https://apps.apple.com/us/app/fashluxee/id6756571621"
+                                                                    <li><a href="https://apps.apple.com/us/app/fashluxee/id6756571621" target="_blank" rel="noopener noreferrer"
                                             class="text-muted-foreground hover:text-accent transition-colors font-light text-sm tracking-wide">App Store</a>
                                     </li>
-                                                            </ul>
+                                                                                            </ul>
                         </div>
                     </div>
 
                     <!-- Bottom Bar -->
                     <div
-                        class="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                        class="pt-10 border-t border-border dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
                         <p class="text-muted-foreground text-xs font-light tracking-wide">&copy; 2026
-                            Fashluxee All rights reserved.</p>
+                            Fashluxee. All rights reserved.</p>
                         <div class="flex gap-8">
                                                                                                                                                                                                                                                                                                                         <a href="https://fashluxee.com/privacy-policy"
                                         class="text-muted-foreground hover:text-accent transition-colors font-light text-xs tracking-wide">Privacy Policy</a>
@@ -939,15 +1113,61 @@
             disable: 'mobile'
         });
 
+        // Theme management
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.contains('dark');
+            if (isDark) {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+                document.documentElement.style.colorScheme = 'light';
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+                document.documentElement.style.colorScheme = 'dark';
+                localStorage.setItem('theme', 'dark');
+            }
+            updateThemeToggleLabels();
+        }
+
+        function updateThemeToggleLabels() {
+            const isDark = document.documentElement.classList.contains('dark');
+            document.querySelectorAll('.theme-toggle-label').forEach(el => {
+                el.textContent = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+            });
+            document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+                btn.setAttribute('aria-label', isDark ? 'Switch to Light mode' : 'Switch to Dark mode');
+                btn.setAttribute('title', isDark ? 'Switch to Light mode' : 'Switch to Dark mode');
+            });
+        }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                if (e.matches) {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                    document.documentElement.style.colorScheme = 'dark';
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                    document.documentElement.style.colorScheme = 'light';
+                }
+                updateThemeToggleLabels();
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
+            updateThemeToggleLabels();
+
             const toggleBtn = document.getElementById('menu-toggle');
             const mobileMenu = document.getElementById('mobile-menu');
 
-            toggleBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-                toggleBtn.setAttribute('aria-expanded', mobileMenu.classList.contains('hidden') ? 'false' :
-                    'true');
-            });
+            if (toggleBtn && mobileMenu) {
+                toggleBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    toggleBtn.setAttribute('aria-expanded', mobileMenu.classList.contains('hidden') ? 'false' : 'true');
+                });
+            }
         });
     </script>
     </body>

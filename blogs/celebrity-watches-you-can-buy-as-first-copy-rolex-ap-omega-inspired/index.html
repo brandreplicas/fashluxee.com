@@ -245,22 +245,40 @@
 
         .detail-hero-wrapper {
             position: relative;
-            height: 70vh;
+            min-height: 55vh;
             width: 100%;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .detail-hero-wrapper {
+                height: 70vh;
+                min-height: 550px;
+            }
         }
 
         .detail-hero-content {
-            position: absolute;
-            inset: 0;
+            position: relative;
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 10;
             text-align: center;
-            background: radial-gradient(circle at center, transparent, rgba(0, 0, 0, 0.7));
-            padding: 24px;
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8));
+            padding: 3rem 1.25rem;
+        }
+
+        @media (min-width: 768px) {
+            .detail-hero-content {
+                position: absolute;
+                inset: 0;
+                padding: 24px;
+            }
         }
 
         .hero-image {
@@ -274,12 +292,23 @@
 
         .article-title {
             font-family: var(--lux-serif);
-            font-size: clamp(2.5rem, 8vw, 4rem);
-            line-height: 1.1;
-            margin-bottom: 2rem;
+            font-size: clamp(1.4rem, 5.5vw, 2.25rem);
+            line-height: 1.25;
+            margin-bottom: 1.25rem;
             font-weight: 500;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.01em;
             color: white;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        @media (min-width: 640px) {
+            .article-title {
+                font-size: clamp(2rem, 5vw, 3.75rem);
+                line-height: 1.15;
+                margin-bottom: 2rem;
+                letter-spacing: -0.02em;
+            }
         }
 
         .article-meta {
@@ -816,6 +845,34 @@
                 <div class="sticky top-32">
                     <h3 class="sidebar-title">Narratives</h3>
                     <div class="space-y-10">
+                                                    <a href="https://fashluxee.com/blogs/automatic-vs-quartz-replica-watches-what-you-should-choose" class="latest-blog-item group block">
+                                <div class="aspect-[16/10] overflow-hidden mb-4 rounded shadow-sm">
+                                    <img src="https://fashluxee.com/img/blogs/automatic-vs-quartz-replica-watches-what-you-should-choose-1-1782830139.png" class="w-full h-full object-cover"
+                                        alt="Automatic Vs Quartz Replica Watches What You Should Choose">
+                                </div>
+                                <div class="text-[0.6rem] tracking-[0.2em] uppercase text-muted-foreground mb-1">
+                                    22 June, 2026</div>
+                                <h4
+                                    class="font-serif text-lg leading-snug group-hover:text-accent transition-colors text-foreground">
+                                    Automatic Vs Quartz Replica Watches What You Should Choose</h4>
+                                <span
+                                    class="text-[0.6rem] tracking-[0.3em] uppercase text-accent opacity-0 group-hover:opacity-100 transition-all">Read
+                                    Story</span>
+                            </a>
+                                                    <a href="https://fashluxee.com/blogs/from-g-shock-to-statement-dials-the-best-bold-geometric-and-skeleton-watches-redefining-indian-youth-fashion" class="latest-blog-item group block">
+                                <div class="aspect-[16/10] overflow-hidden mb-4 rounded shadow-sm">
+                                    <img src="https://fashluxee.com/img/blogs/from-g-shock-to-statement-dials-the-best-bold-geometric-and-skeleton-watches-redefining-indian-youth-fashion-1-1782830139.png" class="w-full h-full object-cover"
+                                        alt="From G Shock To Statement Dials The Best Bold Geometric And Skeleton Watches Redefining Indian Youth Fashion">
+                                </div>
+                                <div class="text-[0.6rem] tracking-[0.2em] uppercase text-muted-foreground mb-1">
+                                    22 June, 2026</div>
+                                <h4
+                                    class="font-serif text-lg leading-snug group-hover:text-accent transition-colors text-foreground">
+                                    From G Shock To Statement Dials The Best Bold Geometric And Skeleton Watches Redefining Indian Youth Fashion</h4>
+                                <span
+                                    class="text-[0.6rem] tracking-[0.3em] uppercase text-accent opacity-0 group-hover:opacity-100 transition-all">Read
+                                    Story</span>
+                            </a>
                                                     <a href="https://fashluxee.com/blogs/new-season-louis-vuitton-trainers-the-most-exclusive-drop-right-now" class="latest-blog-item group block">
                                 <div class="aspect-[16/10] overflow-hidden mb-4 rounded shadow-sm">
                                     <img src="https://fashluxee.com/img/blogs/new-season-louis-vuitton-trainers-the-most-exclusive-drop-right-now-1-1782830139.png" class="w-full h-full object-cover"
@@ -826,34 +883,6 @@
                                 <h4
                                     class="font-serif text-lg leading-snug group-hover:text-accent transition-colors text-foreground">
                                     New Season Louis Vuitton Trainers The Most Exclusive Drop Right Now</h4>
-                                <span
-                                    class="text-[0.6rem] tracking-[0.3em] uppercase text-accent opacity-0 group-hover:opacity-100 transition-all">Read
-                                    Story</span>
-                            </a>
-                                                    <a href="https://fashluxee.com/blogs/festive-wardrobe-essentials-why-black-and-gold-contrast-chronographs-are-driving-indias-modern-gifting-culture" class="latest-blog-item group block">
-                                <div class="aspect-[16/10] overflow-hidden mb-4 rounded shadow-sm">
-                                    <img src="https://fashluxee.com/img/blogs/festive-wardrobe-essentials-why-black-and-gold-contrast-chronographs-are-driving-indias-modern-gifting-culture-1-1782830139.png" class="w-full h-full object-cover"
-                                        alt="Festive Wardrobe Essentials Why Black And Gold Contrast Chronographs Are Driving India’s Modern Gifting Culture">
-                                </div>
-                                <div class="text-[0.6rem] tracking-[0.2em] uppercase text-muted-foreground mb-1">
-                                    22 June, 2026</div>
-                                <h4
-                                    class="font-serif text-lg leading-snug group-hover:text-accent transition-colors text-foreground">
-                                    Festive Wardrobe Essentials Why Black And Gold Contrast Chronographs Are Driving India’s Modern Gifting Culture</h4>
-                                <span
-                                    class="text-[0.6rem] tracking-[0.3em] uppercase text-accent opacity-0 group-hover:opacity-100 transition-all">Read
-                                    Story</span>
-                            </a>
-                                                    <a href="https://fashluxee.com/blogs/celebrity-luxury-bags-you-can-buy-as-first-copy-in-india-2026-guide" class="latest-blog-item group block">
-                                <div class="aspect-[16/10] overflow-hidden mb-4 rounded shadow-sm">
-                                    <img src="https://fashluxee.com/img/blogs/celebrity-luxury-bags-you-can-buy-as-first-copy-in-india-2026-guide-1-1782830139.png" class="w-full h-full object-cover"
-                                        alt="Celebrity Luxury Bags You Can Buy As First Copy In India (2026 Guide)">
-                                </div>
-                                <div class="text-[0.6rem] tracking-[0.2em] uppercase text-muted-foreground mb-1">
-                                    22 June, 2026</div>
-                                <h4
-                                    class="font-serif text-lg leading-snug group-hover:text-accent transition-colors text-foreground">
-                                    Celebrity Luxury Bags You Can Buy As First Copy In India (2026 Guide)</h4>
                                 <span
                                     class="text-[0.6rem] tracking-[0.3em] uppercase text-accent opacity-0 group-hover:opacity-100 transition-all">Read
                                     Story</span>
